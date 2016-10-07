@@ -19,7 +19,8 @@ let s:vimplate = Vimplate
 
 function s:RunVimplate(template)
   let l:tmpfile = tempname()
-  let l:cmd =  s:vimplate. " -out=" . l:tmpfile . " -template=" . a:template
+  let l:filename = expand( '%:t' ) 
+  let l:cmd =  s:vimplate. " -out=" . l:tmpfile . " -template=" . a:template . "-filename=". l:filename
   let l:line = line(".")
   execute "!" . l:cmd
   silent execute "read " . l:tmpfile
