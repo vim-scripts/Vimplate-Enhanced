@@ -1,4 +1,9 @@
+forked from https://github.com/vim-scripts/Vimplate-Enhanced
+7/Oct/2016:Basic changes to allow multiple templates per filetype.
+
 This is a mirror of http://www.vim.org/scripts/script.php?script_id=1808
+
+TODO:
 
 *** Introduction and Explanation ***
 
