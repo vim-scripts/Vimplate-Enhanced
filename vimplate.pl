@@ -4,7 +4,11 @@
 
 use strict;
 use warnings;
-use Switch;
+#use Switch;
+use v5.14;
+use feature "switch";
+no warnings 'experimental::smartmatch';
+
 
 =head1 NAME
 
@@ -95,7 +99,7 @@ $vimplaterc = $ENV{'HOME'}.$DIR_SEPARATOR.'.vimplaterc';
 
 =over 4
 
-=item vimplate <-template=<template>> [-out=<file>]
+=item vimplate <-template=<template>> [-out=<file>] [-filename=<file being modified>]
                [-user=<user>] [-dir=<dir>] [-config=<file>]
 
 =item vimplate <-createconfig>
@@ -116,7 +120,7 @@ $vimplaterc = $ENV{'HOME'}.$DIR_SEPARATOR.'.vimplaterc';
 
 my %opt = ();
 GetOptions(
-            \%opt, 'template|t=s', '-out|o=s',
+            \%opt, 'template|t=s', '-out|o=s', '-filename|f=s',
                    'user=s', 'dir=s', 'config=s',
                    'createconfig',
                    'listtemplates!',
@@ -191,23 +195,23 @@ if (defined $opt{createconfig}) {
   my (@splitname, $first, $middle, $last, $domain, $email, $input, $username);
   @splitname = split(/ /, $ENV{'USER'});
   
-  switch (scalar @splitname) {
-    case 0 {
+  for (scalar @splitname) {
+    when (0) {
       $first = '';
       $middle = '';
       $last = '';
     }
-    case 1 {
+    when (1) {
       $first = $splitname[0];
       $middle = $splitname[0];
       $last = $splitname[0];
     }
-    case 2{
+    when (2) {
       $first = $splitname[0];
       $middle = '';
       $last = $splitname[1];
     }
-    else {
+    default {
       $first = $splitname[0];
       $first = $splitname[1];
       $first = $splitname[2];
@@ -432,6 +436,7 @@ if (defined $opt{template}) {
       chomp(my $input=<STDIN>);
       return $input;
     },
+    filename=>$opt{filename},
   };
 
   $tt->process($opt{template}.'.tt', $ttvar, $opt{out});
